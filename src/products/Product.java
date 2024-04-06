@@ -1,3 +1,5 @@
+package products;
+
 import java.io.Serializable;
 
 public class Product {

@@ -1,3 +1,5 @@
+package products;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,4 +39,4 @@ public class InventoryManager {
     // Інші методи, як-от відображення інформації про групи та їх товари...
 }
 
-// Класи Product та ProductGroup вже визначені, як було припущено раніше.
+// Класи products.Product та products.ProductGroup вже визначені, як було припущено раніше.
