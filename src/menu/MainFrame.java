@@ -1,17 +1,19 @@
+package menu;
+
+import products.InventoryManager;
+import products.ProductGroup;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-
-public class MainFrame extends JFrame {
+/*
+public class menu.MainFrame extends JFrame {
     private JButton addButton;
     private List<ProductGroup> productGroups = new ArrayList<>();
     private InventoryManager inventoryManager = new InventoryManager();
 
 
-    public MainFrame() {
+    public menu.MainFrame() {
         setTitle("Автоматизоване Робоче Місце");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -53,12 +55,12 @@ public class MainFrame extends JFrame {
 
         initializeUI();
         createViewPanel(inventoryManager.getProductGroups());
-        List<Product> products = DataPersistence.loadProductsFromFile("products.dat");
+        List<Product> products = menu.DataPersistence.loadProductsFromFile("products.dat");
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                DataPersistence.saveProductsToFile(products, "products.dat");
+                menu.DataPersistence.saveProductsToFile(products, "products.dat");
             }
         });
 
@@ -176,8 +178,34 @@ public class MainFrame extends JFrame {
     }
 
     private void showAddGroupDialog() {
-        GroupDialog dialog = new GroupDialog(this, "Додати групу товарів", true);
+        menu.AddDialog dialog = new menu.AddDialog(this, "Додати групу", true, inventoryManager.getProductGroups());
         dialog.setVisible(true);
+    }
+
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            menu.MainFrame frame = new menu.MainFrame();
+            frame.setVisible(true);
+        });
+    }
+}
+*/
+
+public class MainFrame extends JFrame {
+    private InventoryManager inventoryManager = new InventoryManager();
+    private List<ProductGroup> productGroups = new ArrayList<>();
+
+    public MainFrame() {
+        setTitle("Автоматизоване Робоче Місце");
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        MenuBuilder.createMenuBar(this, inventoryManager);
+        ToolBarBuilder.createToolBar(this, inventoryManager);
+        ContentViewPanel.createViewPanel(this, inventoryManager.getProductGroups());
+
     }
 
     public static void main(String[] args) {
@@ -187,3 +215,4 @@ public class MainFrame extends JFrame {
         });
     }
 }
+
