@@ -16,7 +16,6 @@ public class MenuBuilder {
         JMenuItem newItem = new JMenuItem("Новий");
         newItem.addActionListener(e -> {
             // Тут має бути логіка для додавання нового елементу
-            dialogManager.showAddProductDialog(frame, inventoryManager);
         });
         JMenuItem openItem = new JMenuItem("Відкрити");
         openItem.addActionListener(e -> {
@@ -39,6 +38,7 @@ public class MenuBuilder {
         JMenu editMenu = new JMenu("Редагувати");
         JMenuItem addProductItem = new JMenuItem("Додати товар");
         addProductItem.addActionListener(e -> {
+            dialogManager.showAddProductDialog(frame, inventoryManager);
             // Тут має бути логіка для додавання товару
         });
         JMenuItem editProductItem = new JMenuItem("Редагувати товар");

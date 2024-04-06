@@ -1,5 +1,6 @@
 package menu;
 
+import action.DialogManager;
 import products.InventoryManager;
 import products.Product;
 
@@ -9,11 +10,14 @@ import java.awt.*;
 
 public class ToolBarBuilder {
 
+    private static DialogManager dialogManager = new DialogManager();
     public static void createToolBar(MainFrame frame, InventoryManager inventoryManager) {
         JToolBar toolBar = new JToolBar();
 
         JButton addButton = new JButton("Додати");
-        // Додаємо логіку для додавання нового елементу
+        addButton.addActionListener(e ->
+                dialogManager.showAddProductDialog(frame, inventoryManager)
+            );
 
         JButton editButton = new JButton("Редагувати");
         // Додаємо логіку для редагування вибраного елементу
