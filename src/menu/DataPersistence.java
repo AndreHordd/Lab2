@@ -1,3 +1,7 @@
+package menu;
+
+import products.Product;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
