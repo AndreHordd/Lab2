@@ -1,7 +1,9 @@
 package menu;
 
 import products.InventoryManager;
+import products.Product;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,32 +13,35 @@ public class ToolBarBuilder {
         JToolBar toolBar = new JToolBar();
 
         JButton addButton = new JButton("Додати");
-        addButton.addActionListener(e -> {
-            // Тут має бути логіка для додавання нового елементу
-            showAddProductDialog(frame, inventoryManager);
-        });
+        // Додаємо логіку для додавання нового елементу
 
         JButton editButton = new JButton("Редагувати");
-        editButton.addActionListener(e -> {
-            // Тут має бути логіка для редагування вибраного елементу
-        });
+        // Додаємо логіку для редагування вибраного елементу
 
         JButton deleteButton = new JButton("Видалити");
-        deleteButton.addActionListener(e -> {
-            // Тут має бути логіка для видалення вибраного елементу
+        // Додаємо логіку для видалення вибраного елементу
+
+        JButton searchButton = new JButton("Пошук");
+        searchButton.addActionListener(e -> {
+            showSearchDialog(frame, inventoryManager);
         });
 
         toolBar.add(addButton);
         toolBar.add(editButton);
         toolBar.add(deleteButton);
+        toolBar.add(searchButton);
 
         frame.add(toolBar, BorderLayout.NORTH);
     }
 
-    private static void showAddProductDialog(MainFrame frame, InventoryManager inventoryManager) {
-        // Метод для відображення діалогу додавання нового товару
-        // Приклад:
-        AddDialog dialog = new AddDialog(frame, "Додати товар", true, inventoryManager.getProductGroups());
-        dialog.setVisible(true);
+    private static void showSearchDialog(MainFrame frame, InventoryManager inventoryManager) {
+        // Метод для відображення діалогу пошуку товару
+        // Ви можете використовувати JOptionPane для простого вводу або створити власний діалог, як у прикладі з додаванням товару
+        // У методі showSearchDialog або подібному
+
+        String productName = JOptionPane.showInputDialog(frame, "Введіть назву товару для пошуку:");
+        List<Product> foundProducts = inventoryManager.searchProductsByName(productName);
+        ContentViewPanel.updateTableWithSearchResults(foundProducts);
+
     }
 }

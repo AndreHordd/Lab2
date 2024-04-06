@@ -37,6 +37,17 @@ public class InventoryManager {
     }
 
     // Інші методи, як-от відображення інформації про групи та їх товари...
+    public List<Product> searchProductsByName(String productName) {
+        List<Product> foundProducts = new ArrayList<>();
+        for (ProductGroup group : productGroups) {
+            for (Product product : group.getProducts()) {
+                if (product.getName().toLowerCase().contains(productName.toLowerCase())) {
+                    foundProducts.add(product);
+                }
+            }
+        }
+        return foundProducts;
+    }
 }
 
 // Класи products.Product та products.ProductGroup вже визначені, як було припущено раніше.
