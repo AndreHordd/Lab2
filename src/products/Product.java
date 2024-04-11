@@ -67,7 +67,13 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("%s (%s), %s, %d шт, %.2f грн.", name, description, manufacturer, quantity, price);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Назва: ").append(name).append("\n");
+        sb.append("Опис: ").append(description).append("\n");
+        sb.append("Виробник: ").append(manufacturer).append("\n");
+        sb.append("Кількість: ").append(quantity).append("\n");
+        sb.append("Ціна: ").append(price).append(" грн");
+        return sb.toString();
     }
 
 

@@ -49,4 +49,27 @@ public class ProductGroup implements Serializable {
     public String toString() {
         return String.format("%s: %s", name, description);
     }
+
+    public String calculateGroupPrice() {
+        StringBuilder sb = new StringBuilder();
+        double total = 0;
+        for (Product product : products) {
+            total += product.getPrice() * product.getQuantity();
+        }
+        sb.append(total).append(" грн");
+        return sb.toString();
+    }
+
+    public String getStatistics() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Кількість товарів у групі: ").append(products.size()).append("\n");
+        sb.append("----------------------------\n");
+        sb.append("Список товарів у групі: \n");
+        sb.append("----------------------------\n");
+        for (Product product : products) {
+            sb.append(product).append("\n");
+            sb.append("----------------------------\n");
+        }
+        return sb.toString();
+    }
 }

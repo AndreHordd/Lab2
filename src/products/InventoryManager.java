@@ -47,6 +47,7 @@ public class InventoryManager {
         }
         return foundProducts;
     }
+
     public Product getSelectedProduct(JTable table) {
         int selectedRowIndex = table.getSelectedRow();
         if (selectedRowIndex != -1) {
@@ -62,6 +63,37 @@ public class InventoryManager {
             }
         }
         return null; // No product selected or found
+    }
+
+
+    public String calculateInventoryPrice() {
+        StringBuilder builder = new StringBuilder();
+        double total = 0.0;
+        for (ProductGroup group : productGroups) {
+            for (Product product : group.getProducts()) {
+                total += product.getPrice() * product.getQuantity();
+            }
+        }
+        builder.append(total).append(" грн");
+        return builder.toString();
+    }
+
+    /*
+    має бути зазначена к-сть товарів на складі та списком всі товари на складі
+     */
+    public String getStatistics() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Кількість товарів на складі: ").append(productGroups.stream().mapToInt(group -> group.getProducts().size()).sum()).append("\n");
+        builder.append("----------------------------\n");
+        builder.append("Список товарів на складі: \n");
+        builder.append("----------------------------\n");
+        for (ProductGroup group : productGroups) {
+            for (Product product : group.getProducts()) {
+                builder.append(product).append("\n");
+                builder.append("----------------------------\n");
+            }
+        }
+        return builder.toString();
     }
 }
 

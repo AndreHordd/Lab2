@@ -3,11 +3,13 @@ package action;
 import menu.AddDialog;
 import menu.ContentViewPanel;
 import menu.EditDialog;
+import menu.MainFrame;
 import products.InventoryManager;
 import products.Product;
 import products.ProductGroup;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class DialogManager {
@@ -44,7 +46,7 @@ public class DialogManager {
         }
     }
 
-    public static void onNewGroup(JFrame parentFrame, InventoryManager inventoryManager) {
+    public static void showNewGroupDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         String groupName = JOptionPane.showInputDialog(parentFrame, "Назва нової групи:");
         if (groupName != null && !groupName.trim().isEmpty()) {
             String groupDescription = JOptionPane.showInputDialog(parentFrame, "Опис нової групи:");
@@ -105,6 +107,60 @@ public class DialogManager {
                 // Тут можна додати оновлення віджетів або інтерфейсів, які залежать від списку груп
                 // Наприклад, оновлення відображення таблиці або випадаючих списків
             }
+        }
+    }
+
+    public static void showSearchDialog(MainFrame frame, InventoryManager inventoryManager) {
+
+    }
+
+    public static void showStorageStatDialog(MainFrame frame, InventoryManager inventoryManager) {
+        // Get the statistics from the inventory
+        String statistics = inventoryManager.getStatistics();
+
+        // Create a JTextArea to display the statistics
+        JTextArea textArea = new JTextArea(statistics);
+        textArea.setEditable(false);
+
+        // Create a JScrollPane to make the JTextArea scrollable
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(700, 500)); // Set the preferred size of the scroll pane
+
+        // Create a JOptionPane with the scroll pane
+        JOptionPane.showMessageDialog(frame, scrollPane, "Статистика складу", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void showGroupStatDialog(MainFrame frame, InventoryManager inventoryManager) {
+        Object selectedGroup = JOptionPane.showInputDialog(frame, "Виберіть групу для відображення статистики:",
+                "Вибір групи", JOptionPane.QUESTION_MESSAGE, null,
+                inventoryManager.getProductGroups().toArray(), null);
+
+        if (selectedGroup instanceof ProductGroup) {
+            ProductGroup group = (ProductGroup) selectedGroup;
+            String statistics = group.getStatistics();
+
+            JTextArea textArea = new JTextArea(statistics);
+            textArea.setEditable(false);
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(700, 500));
+
+            JOptionPane.showMessageDialog(frame, scrollPane, "Статистика групи \"" + group.getName() + "\"", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public static void showStoragePriceDialog(MainFrame frame, InventoryManager inventoryManager) {
+        JOptionPane.showMessageDialog(frame, "Загальна вартість складу: " + inventoryManager.calculateInventoryPrice(), "Загальна вартість складу", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void showGroupPriceDialog(MainFrame frame, InventoryManager inventoryManager) {
+        Object selectedGroup = JOptionPane.showInputDialog(frame, "Виберіть групу для розрахунку вартості:",
+                "Вибір групи", JOptionPane.QUESTION_MESSAGE, null,
+                inventoryManager.getProductGroups().toArray(), null);
+
+        if (selectedGroup instanceof ProductGroup) {
+            ProductGroup group = (ProductGroup) selectedGroup;
+            JOptionPane.showMessageDialog(frame, "Загальна вартість групи \"" + group.getName() + "\": " + group.calculateGroupPrice(), "Загальна вартість групи", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

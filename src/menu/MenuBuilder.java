@@ -43,7 +43,7 @@ public class MenuBuilder {
 
         JMenu editGroupMenu = new JMenu("Група товарів");
         JMenuItem addGroupItem = new JMenuItem("Додати групу");
-        addGroupItem.addActionListener(e -> DialogManager.onNewGroup(frame, inventoryManager));
+        addGroupItem.addActionListener(e -> DialogManager.showNewGroupDialog(frame, inventoryManager));
 
         JMenuItem editGroupItem = new JMenuItem("Редагувати групу");
         editGroupItem.addActionListener(e -> DialogManager.showEditGroupDialog(frame, inventoryManager));
@@ -70,17 +70,38 @@ public class MenuBuilder {
         editGroupMenu.add(deleteGroupItem);
 
         JMenu infoItem = new JMenu("Інформація");
-        JMenuItem statItem = new JMenuItem("Статистика");
-        statItem.addActionListener(e -> {
-            // Тут має бути логіка для відображення статистики
+        JMenuItem storageStatItem = new JMenuItem("Статистика складу");
+        storageStatItem.addActionListener(e -> {
+            DialogManager.showStorageStatDialog(frame, inventoryManager);
         });
+
+        JMenuItem groupStatItem = new JMenuItem("Статистика групи");
+        groupStatItem.addActionListener(e -> {
+            DialogManager.showGroupStatDialog(frame, inventoryManager);
+        });
+
+        JMenuItem storagePriceItem = new JMenuItem("Загальна вартість складу");
+        storagePriceItem.addActionListener(e -> {
+            DialogManager.showStoragePriceDialog(frame, inventoryManager);
+        });
+
+        JMenuItem groupPriceItem = new JMenuItem("Загальна вартість групи");
+        groupPriceItem.addActionListener(e -> {
+            DialogManager.showGroupPriceDialog(frame, inventoryManager);
+        });
+
 
         JMenuItem searchItem = new JMenuItem("Пошук");
         searchItem.addActionListener(e -> {
-            // Тут має бути логіка для пошуку
+            DialogManager.showSearchDialog(frame, inventoryManager);
         });
 
-        infoItem.add(statItem);
+        infoItem.add(storageStatItem);
+        infoItem.add(groupStatItem);
+        infoItem.addSeparator();
+        infoItem.add(storagePriceItem);
+        infoItem.add(groupPriceItem);
+        infoItem.addSeparator();
         infoItem.add(searchItem);
 
         JMenu manageMenu = new JMenu("Управління");
