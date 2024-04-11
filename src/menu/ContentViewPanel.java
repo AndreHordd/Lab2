@@ -27,7 +27,8 @@ public class ContentViewPanel {
 
         Object[][] data = prepareTableData(groups);
 
-        table = new JTable(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(700, 70));
         table.setFillsViewportHeight(true);
 
@@ -35,7 +36,7 @@ public class ContentViewPanel {
         frame.add(scrollPane, BorderLayout.CENTER);
     }
 
-    // Винесемо підготовку даних для таблиці в окремий метод
+
     private static Object[][] prepareTableData(List<ProductGroup> groups) {
         List<Object[]> dataList = new ArrayList<>();
         for (ProductGroup group : groups) {
@@ -55,26 +56,10 @@ public class ContentViewPanel {
         return dataList.toArray(new Object[0][]);
     }
 
-    // Метод для оновлення таблиці з результатами пошуку
-    public static void updateTableWithSearchResults(List<Product> searchResults) {
-        // Цей метод припускає, що кожен продукт належить до якоїсь групи, тому ми можемо ігнорувати групу в цьому контексті
-        List<Object[]> dataList = new ArrayList<>();
-        for (Product product : searchResults) {
-            dataList.add(new Object[]{
-                    "Пошуковий результат", // Це поле може бути замінено на реальну назву групи, якщо потрібно
-                    "", // Опис групи може бути порожнім або заповненим за необхідності
-                    product.getName(),
-                    product.getDescription(),
-                    product.getManufacturer(),
-                    product.getQuantity(),
-                    product.getPrice()
-            });
-        }
-
-        Object[][] data = dataList.toArray(new Object[0][]);
-
-        // Встановлюємо нові дані для таблиці
-        table.setModel(new DefaultTableModel(data, new String[]{
+    public static void refreshTableData(List<ProductGroup> groups) {
+        Object[][] data = prepareTableData(groups);
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setDataVector(data, new String[]{
                 "Група",
                 "Опис групи",
                 "Назва товару",
@@ -82,9 +67,11 @@ public class ContentViewPanel {
                 "Виробник",
                 "Кількість на складі",
                 "Ціна за одиницю"
-        }));
+        });
+    }
 
-        // Оновлення скролл-панелі необхідно, якщо розміри таблиці суттєво змінилися
-        scrollPane.setViewportView(table);
+
+    public static JTable getTable() {
+        return table;
     }
 }

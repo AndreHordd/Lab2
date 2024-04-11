@@ -4,21 +4,23 @@ import products.Product;
 import products.ProductGroup;
 
 import javax.swing.*;
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 
-public class AddDialog extends JDialog {
+public class EditDialog extends JDialog {
     private JTextField nameField, manufacturerField, quantityField, priceField;
     private JTextArea descriptionField;
     private JComboBox<ProductGroup> groupComboBox;
-    private JButton saveButton, cancelButton, newGroupButton;
-
+    private JButton saveButton, cancelButton;
+    private Product product;
     private List<ProductGroup> productGroups;
 
-    public AddDialog(Frame owner, String title, boolean modal, List<ProductGroup> productGroups) {
+    public EditDialog(Frame owner, String title, boolean modal, Product product, List<ProductGroup> productGroups) {
         super(owner, title, modal);
+        this.product = product;
         this.productGroups = productGroups;
         initComponents();
+        fillData();
     }
 
     private void initComponents() {
@@ -31,7 +33,6 @@ public class AddDialog extends JDialog {
         groupComboBox = new JComboBox<>(new DefaultComboBoxModel<>(productGroups.toArray(new ProductGroup[0])));
         saveButton = new JButton("Зберегти");
         cancelButton = new JButton("Скасувати");
-        newGroupButton = new JButton("Нова група");
 
         JPanel panel = setupPanel();
         setLayout(new BorderLayout());
@@ -40,9 +41,17 @@ public class AddDialog extends JDialog {
 
         pack();
 
-        saveButton.addActionListener(e -> onSave());
+        saveButton.addActionListener(e -> onSave(productGroups));
         cancelButton.addActionListener(e -> setVisible(false));
-        newGroupButton.addActionListener(e -> onNewGroup());
+    }
+
+    private void fillData() {
+        nameField.setText(product.getName());
+        descriptionField.setText(product.getDescription());
+        manufacturerField.setText(product.getManufacturer());
+        quantityField.setText(String.valueOf(product.getQuantity()));
+        priceField.setText(String.valueOf(product.getPrice()));
+        groupComboBox.setSelectedItem(productGroups.stream().filter(pg -> pg.getProducts().contains(product)).findFirst().orElse(null));
     }
 
     private JPanel setupPanel() {
@@ -73,55 +82,40 @@ public class AddDialog extends JDialog {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(saveButton);
         buttonsPanel.add(cancelButton);
-        buttonsPanel.add(newGroupButton);
         return buttonsPanel;
     }
 
-    private void onSave() {
+    private void onSave(List<ProductGroup> groups) { // Припускаємо, що groups передається як параметр
         // Перевірка, чи поля не порожні
+        ProductGroup selectedGroup = (ProductGroup) groupComboBox.getSelectedItem();
+        product.setProductGroup(selectedGroup);
         if (nameField.getText().trim().isEmpty() || descriptionField.getText().trim().isEmpty() ||
                 manufacturerField.getText().trim().isEmpty() || quantityField.getText().trim().isEmpty() ||
                 priceField.getText().trim().isEmpty()) {
+
             JOptionPane.showMessageDialog(this, "Усі поля повинні бути заповнені.", "Помилка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String name = nameField.getText().trim();
-            String description = descriptionField.getText().trim();
-            String manufacturer = manufacturerField.getText().trim();
             int quantity = Integer.parseInt(quantityField.getText().trim());
             double price = Double.parseDouble(priceField.getText().trim());
-            ProductGroup selectedGroup = (ProductGroup) groupComboBox.getSelectedItem();
 
-            // Створення нового продукту
-            Product newProduct = new Product(name, description, manufacturer, quantity, price, selectedGroup);
+            product.setName(nameField.getText().trim());
+            product.setDescription(descriptionField.getText().trim());
+            product.setManufacturer(manufacturerField.getText().trim());
+            product.setQuantity(quantity);
+            product.setPrice(price);
 
-            // Додавання продукту до вибраної групи
-            if (selectedGroup != null) {
-                JOptionPane.showMessageDialog(this, "Продукт успішно збережено.", "Збереження", JOptionPane.INFORMATION_MESSAGE);
-                setVisible(false); // Закриваємо діалог
-            } else {
-                JOptionPane.showMessageDialog(this, "Виберіть групу продукту.", "Група не вибрана", JOptionPane.ERROR_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "Продукт успішно збережено.", "Збереження", JOptionPane.INFORMATION_MESSAGE);
+
+            setVisible(false); // Закриваємо діалог або оновлюємо інтерфейс
+
+            // Оновлюємо дані в таблиці
+            ContentViewPanel.refreshTableData(groups); // Передаємо оновлений список груп товарів
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
-    private void onNewGroup() {
-        String groupName = JOptionPane.showInputDialog(this, "Назва нової групи:");
-        if (groupName != null && !groupName.trim().isEmpty()) {
-            String groupDescription = JOptionPane.showInputDialog(this, "Опис нової групи:");
-            if (groupDescription != null && !groupDescription.trim().isEmpty()) {
-                ProductGroup newGroup = new ProductGroup(groupName.trim(), groupDescription.trim());
-                if (newGroup != null) {
-                    productGroups.add(newGroup);
-                    groupComboBox.addItem(newGroup);
-                    groupComboBox.setSelectedItem(newGroup);
-                }
-            }
-        }
-    }
 }
+

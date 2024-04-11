@@ -21,12 +21,14 @@ public class MainFrame extends JFrame {
         ToolBarBuilder.createToolBar(this, inventoryManager);
         ContentViewPanel.createViewPanel(this, inventoryManager.getProductGroups());
 
+        setVisible(true);
+
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame();
-            frame.setVisible(true);
+
         });
     }
 }

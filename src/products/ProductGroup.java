@@ -20,11 +20,16 @@ public class ProductGroup implements Serializable {
     // Methods to add, edit, and delete products
     public void addProduct(Product product) {
         products.add(product);
+        System.out.println("Product added: " + product);
     }
 
     public void removeProduct(Product product) {
-        products.remove(product);
+        boolean removed = products.remove(product);
+        System.out.println("Trying to remove: " + product);
+        System.out.println("Product removed: " + removed);
     }
+
+
 
     public void editProduct(int index, Product product) {
         products.set(index, product);

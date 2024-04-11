@@ -2,6 +2,7 @@ package menu;
 
 import action.DialogManager;
 import products.InventoryManager;
+import products.Product;
 
 import javax.swing.*;
 
@@ -35,7 +36,7 @@ public class MenuBuilder {
         fileMenu.add(exitItem);
 
         // Створення меню "Редагувати"
-        JMenu editMenu = new JMenu("Редагувати");
+        JMenu editMenu = new JMenu("Товари");
         JMenuItem addProductItem = new JMenuItem("Додати товар");
         addProductItem.addActionListener(e -> {
             dialogManager.showAddProductDialog(frame, inventoryManager);
@@ -43,20 +44,46 @@ public class MenuBuilder {
         });
         JMenuItem editProductItem = new JMenuItem("Редагувати товар");
         editProductItem.addActionListener(e -> {
-            // Тут має бути логіка для редагування товару
+            Product selectedProduct = inventoryManager.getSelectedProduct(ContentViewPanel.getTable());
+            if (selectedProduct != null) {
+                DialogManager.showEditProductDialog(frame, selectedProduct, inventoryManager.getProductGroups(), inventoryManager);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Будь ласка, виберіть продукт для редагування.", "Продукт не вибрано", JOptionPane.WARNING_MESSAGE);
+            }
         });
+
+        JMenu editGroupMenu = new JMenu("Група товарів");
+        JMenuItem addGroupItem = new JMenuItem("Додати групу");
+        addGroupItem.addActionListener(e -> DialogManager.onNewGroup(frame, inventoryManager));
+
+        JMenuItem editGroupItem = new JMenuItem("Редагувати групу");
+        editGroupItem.addActionListener(e -> DialogManager.showEditGroupDialog(frame, inventoryManager));
+
+
+        JMenuItem deleteGroupItem = new JMenuItem("Видалити групу");
+        deleteGroupItem.addActionListener(e -> {
+            DialogManager.showDeleteGroupDialog(frame, inventoryManager);
+        });
+
+
         JMenuItem deleteProductItem = new JMenuItem("Видалити товар");
         deleteProductItem.addActionListener(e -> {
-            // Тут має бути логіка для видалення товару
+            DialogManager.showDeleteProductDialog(frame, inventoryManager, ContentViewPanel.getTable());
         });
+
 
         editMenu.add(addProductItem);
         editMenu.add(editProductItem);
         editMenu.add(deleteProductItem);
 
+        editGroupMenu.add(addGroupItem);
+        editGroupMenu.add(editGroupItem);
+        editGroupMenu.add(deleteGroupItem);
+
         // Додавання меню на панель меню
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
+        menuBar.add(editGroupMenu);
 
         frame.setJMenuBar(menuBar);
     }
