@@ -101,6 +101,11 @@ public class EditDialog extends JDialog {
             int quantity = Integer.parseInt(quantityField.getText().trim());
             double price = Double.parseDouble(priceField.getText().trim());
 
+            if (quantity <= 0 || price <= 0) {
+                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             product.setName(nameField.getText().trim());
             product.setDescription(descriptionField.getText().trim());
             product.setManufacturer(manufacturerField.getText().trim());
@@ -113,6 +118,7 @@ public class EditDialog extends JDialog {
 
             // Оновлюємо дані в таблиці
             ContentViewPanel.refreshTableData(groups); // Передаємо оновлений список груп товарів
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
         }

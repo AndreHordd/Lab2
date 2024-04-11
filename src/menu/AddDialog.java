@@ -4,8 +4,8 @@ import products.Product;
 import products.ProductGroup;
 
 import javax.swing.*;
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 
 public class AddDialog extends JDialog {
     private JTextField nameField, manufacturerField, quantityField, priceField;
@@ -83,6 +83,19 @@ public class AddDialog extends JDialog {
                 manufacturerField.getText().trim().isEmpty() || quantityField.getText().trim().isEmpty() ||
                 priceField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Усі поля повинні бути заповнені.", "Помилка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            int quantity = Integer.parseInt(quantityField.getText().trim());
+            double price = Double.parseDouble(priceField.getText().trim());
+
+            if (quantity <= 0 || price <= 0) {
+                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

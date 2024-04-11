@@ -19,8 +19,6 @@ public class InventoryManager {
         Product flour = new Product("Борошно", "Вищий сорт", "Київмлин", 120, 15.50, grains);
         Product buckwheat = new Product("Гречка", "Ядриця", "Харківзернопродукт", 80, 32.00, grains);
 
-
-
         // Створення та додавання другої групи
         ProductGroup beverages = new ProductGroup("Напої", "Чай та кава");
         // Створення продуктів для другої групи

@@ -14,24 +14,13 @@ public class MenuBuilder {
 
         // Створення меню "Файл"
         JMenu fileMenu = new JMenu("Файл");
-        JMenuItem newItem = new JMenuItem("Новий");
-        newItem.addActionListener(e -> {
-            // Тут має бути логіка для додавання нового елементу
-        });
-        JMenuItem openItem = new JMenuItem("Відкрити");
-        openItem.addActionListener(e -> {
-            // Тут має бути логіка для відкриття файлу
-        });
-        JMenuItem saveItem = new JMenuItem("Зберегти");
-        saveItem.addActionListener(e -> {
-            // Тут має бути логіка для збереження файлу
-        });
+        JMenuItem importItem = new JMenuItem("Імпорт");
+        JMenuItem exportItem = new JMenuItem("Експорт");
         JMenuItem exitItem = new JMenuItem("Вихід");
         exitItem.addActionListener(e -> System.exit(0));
 
-        fileMenu.add(newItem);
-        fileMenu.add(openItem);
-        fileMenu.add(saveItem);
+        fileMenu.add(importItem);
+        fileMenu.add(exportItem);
         fileMenu.addSeparator(); // Додаємо роздільник
         fileMenu.add(exitItem);
 
@@ -80,10 +69,40 @@ public class MenuBuilder {
         editGroupMenu.add(editGroupItem);
         editGroupMenu.add(deleteGroupItem);
 
+        JMenu infoItem = new JMenu("Інформація");
+        JMenuItem statItem = new JMenuItem("Статистика");
+        statItem.addActionListener(e -> {
+            // Тут має бути логіка для відображення статистики
+        });
+
+        JMenuItem searchItem = new JMenuItem("Пошук");
+        searchItem.addActionListener(e -> {
+            // Тут має бути логіка для пошуку
+        });
+
+        infoItem.add(statItem);
+        infoItem.add(searchItem);
+
+        JMenu manageMenu = new JMenu("Управління");
+        JMenuItem writeOffItem = new JMenuItem("Списати товар");
+        writeOffItem.addActionListener(e -> {
+            // Тут має бути логіка для списання товару
+        });
+
+        JMenuItem additionItem = new JMenuItem("Поповнення товару");
+        additionItem.addActionListener(e -> {
+            // Тут має бути логіка для поповнення товару
+        });
+
+        manageMenu.add(writeOffItem);
+        manageMenu.add(additionItem);
+
         // Додавання меню на панель меню
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(editGroupMenu);
+        menuBar.add(infoItem);
+        menuBar.add(manageMenu);
 
         frame.setJMenuBar(menuBar);
     }

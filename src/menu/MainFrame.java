@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         MenuBuilder.createMenuBar(this, inventoryManager);
-        ToolBarBuilder.createToolBar(this, inventoryManager);
+        // ToolBarBuilder.createToolBar(this, inventoryManager);
         ContentViewPanel.createViewPanel(this, inventoryManager.getProductGroups());
 
         setVisible(true);
