@@ -68,6 +68,8 @@ public class ProductGroup implements Serializable {
         sb.append("----------------------------\n");
         for (Product product : products) {
             sb.append(product).append("\n");
+            double totalPrice = product.getPrice() * product.getQuantity();
+            sb.append("Загальна вартість: ").append(totalPrice).append(" грн\n");
             sb.append("----------------------------\n");
         }
         return sb.toString();

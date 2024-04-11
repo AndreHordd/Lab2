@@ -107,12 +107,12 @@ public class MenuBuilder {
         JMenu manageMenu = new JMenu("Управління");
         JMenuItem writeOffItem = new JMenuItem("Списати товар");
         writeOffItem.addActionListener(e -> {
-            // Тут має бути логіка для списання товару
+            DialogManager.showWriteOffDialog(frame, inventoryManager);
         });
 
         JMenuItem additionItem = new JMenuItem("Поповнення товару");
         additionItem.addActionListener(e -> {
-            // Тут має бути логіка для поповнення товару
+            DialogManager.showAdditionDialog(frame, inventoryManager);
         });
 
         manageMenu.add(writeOffItem);

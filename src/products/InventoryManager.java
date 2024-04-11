@@ -2,6 +2,7 @@ package products;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class InventoryManager {
@@ -77,6 +78,8 @@ public class InventoryManager {
         for (ProductGroup group : productGroups) {
             for (Product product : group.getProducts()) {
                 builder.append(product).append("\n");
+                double totalPrice = product.getPrice() * product.getQuantity();
+                builder.append("Загальна вартість: ").append(totalPrice).append(" грн\n");
                 builder.append("----------------------------\n");
             }
         }
@@ -93,6 +96,14 @@ public class InventoryManager {
             }
         }
         return foundProducts;
+    }
+
+    public Collection<Product> getAllProducts() {
+        List<Product> allProducts = new ArrayList<>();
+        for (ProductGroup group : productGroups) {
+            allProducts.addAll(group.getProducts());
+        }
+        return allProducts;
     }
 }
 
