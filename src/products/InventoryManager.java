@@ -35,19 +35,6 @@ public class InventoryManager {
         return productGroups;
     }
 
-    // Інші методи, як-от відображення інформації про групи та їх товари...
-    public List<Product> searchProductsByName(String productName) {
-        List<Product> foundProducts = new ArrayList<>();
-        for (ProductGroup group : productGroups) {
-            for (Product product : group.getProducts()) {
-                if (product.getName().toLowerCase().contains(productName.toLowerCase())) {
-                    foundProducts.add(product);
-                }
-            }
-        }
-        return foundProducts;
-    }
-
     public Product getSelectedProduct(JTable table) {
         int selectedRowIndex = table.getSelectedRow();
         if (selectedRowIndex != -1) {
@@ -94,6 +81,18 @@ public class InventoryManager {
             }
         }
         return builder.toString();
+    }
+
+    public List<Product> searchProducts(String productName) {
+        List<Product> foundProducts = new ArrayList<>();
+        for (ProductGroup group : productGroups) {
+            for (Product product : group.getProducts()) {
+                if (product.getName().toLowerCase().contains(productName.toLowerCase())) {
+                    foundProducts.add(product);
+                }
+            }
+        }
+        return foundProducts;
     }
 }
 

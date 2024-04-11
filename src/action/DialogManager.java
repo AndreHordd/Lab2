@@ -111,7 +111,34 @@ public class DialogManager {
     }
 
     public static void showSearchDialog(MainFrame frame, InventoryManager inventoryManager) {
+        // Ask the user for the search query
+        String searchQuery = JOptionPane.showInputDialog(frame, "Введіть пошуковий запит:", "Пошук товару", JOptionPane.QUESTION_MESSAGE);
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            // Filter the products based on the search query
+            List<Product> filteredProducts = inventoryManager.searchProducts(searchQuery.trim());
 
+            // Create a new JTable and populate it with the filtered products
+            String[] columnNames = {"Група", "Опис групи", "Назва товару", "Опис товару", "Виробник", "Кількість на складі", "Ціна за одиницю"};
+            Object[][] data = new Object[filteredProducts.size()][7];
+            for (int i = 0; i < filteredProducts.size(); i++) {
+                Product product = filteredProducts.get(i);
+                data[i][0] = product.getProductGroup().getName();
+                data[i][1] = product.getProductGroup().getDescription();
+                data[i][2] = product.getName();
+                data[i][3] = product.getDescription();
+                data[i][4] = product.getManufacturer();
+                data[i][5] = product.getQuantity();
+                data[i][6] = product.getPrice();
+            }
+            JTable table = new JTable(data, columnNames);
+
+            // Create a JScrollPane to make the JTable scrollable
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setPreferredSize(new Dimension(700, 500)); // Set the preferred size of the scroll pane
+
+            // Create a JOptionPane with the scroll pane
+            JOptionPane.showMessageDialog(frame, scrollPane, "Результати пошуку", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public static void showStorageStatDialog(MainFrame frame, InventoryManager inventoryManager) {
