@@ -116,7 +116,10 @@ public class DialogManager {
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             // Filter the products based on the search query
             List<Product> filteredProducts = inventoryManager.searchProducts(searchQuery.trim());
-
+            if (filteredProducts.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Товар не знайдено", "Результати пошуку", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             // Create a new JTable and populate it with the filtered products
             String[] columnNames = {"Група", "Опис групи", "Назва товару", "Опис товару", "Виробник", "Кількість на складі", "Ціна за одиницю"};
             Object[][] data = new Object[filteredProducts.size()][7];
