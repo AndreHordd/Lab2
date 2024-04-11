@@ -27,10 +27,18 @@ public class ContentViewPanel {
 
         Object[][] data = prepareTableData(groups);
 
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Жодна комірка не може бути відредагована
+                return false;
+            }
+        };
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(700, 70));
         table.setFillsViewportHeight(true);
+
+
 
         scrollPane = new JScrollPane(table);
         frame.add(scrollPane, BorderLayout.CENTER);
