@@ -12,6 +12,11 @@ public class MenuBuilder {
     public static JMenuItem resetFilterItem = new JMenuItem("Скинути фільтр");
     private static DialogManager dialogManager;
 
+    public MenuBuilder() {
+        dialogManager = new DialogManager();
+        // Other initialization code...
+    }
+
     public static void createMenuBar(MainFrame frame, InventoryManager inventoryManager) {
         JMenuBar menuBar = new JMenuBar();
 
@@ -21,6 +26,14 @@ public class MenuBuilder {
         JMenuItem exportItem = new JMenuItem("Експорт");
         JMenuItem exitItem = new JMenuItem("Вихід");
         exitItem.addActionListener(e -> System.exit(0));
+
+        importItem.addActionListener(e -> {
+            dialogManager.showImportDialog(frame, inventoryManager);
+        });
+
+        exportItem.addActionListener(e -> {
+            //dialogManager.showExportDialog(frame, inventoryManager);
+        });
 
         fileMenu.add(importItem);
         fileMenu.add(exportItem);

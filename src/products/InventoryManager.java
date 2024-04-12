@@ -32,6 +32,10 @@ public class InventoryManager {
         productGroups.add(beverages);
     }
 
+    public void importInventory(ProductGroup group) {
+        productGroups.add(group);
+    }
+
     public List<ProductGroup> getProductGroups() {
         return productGroups;
     }
@@ -92,6 +96,14 @@ public class InventoryManager {
             allProducts.addAll(group.getProducts());
         }
         return allProducts;
+    }
+
+    public boolean isGroupExists(String groupName) {
+        return productGroups.stream().anyMatch(group -> group.getName().equals(groupName));
+    }
+
+    public boolean isProductExists(String productName) {
+        return productGroups.stream().anyMatch(group -> group.getProducts().stream().anyMatch(product -> product.getName().equals(productName)));
     }
 }
 

@@ -1,5 +1,6 @@
 package menu;
 
+import products.InventoryManager;
 import products.Product;
 import products.ProductGroup;
 
@@ -12,12 +13,14 @@ public class AddDialog extends JDialog {
     private JTextArea descriptionField;
     private JComboBox<ProductGroup> groupComboBox;
     private JButton saveButton, cancelButton, newGroupButton;
+    private InventoryManager inventoryManager;
 
     private List<ProductGroup> productGroups;
 
-    public AddDialog(Frame owner, String title, boolean modal, List<ProductGroup> productGroups) {
+    public AddDialog(Frame owner, String title, boolean modal, InventoryManager inventoryManager) {
         super(owner, title, modal);
-        this.productGroups = productGroups;
+        this.productGroups = inventoryManager.getProductGroups();
+        this.inventoryManager = inventoryManager;
         initComponents();
     }
 
@@ -83,6 +86,11 @@ public class AddDialog extends JDialog {
                 manufacturerField.getText().trim().isEmpty() || quantityField.getText().trim().isEmpty() ||
                 priceField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Усі поля повинні бути заповнені.", "Помилка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(inventoryManager.isProductExists(nameField.getText().trim())){
+            JOptionPane.showMessageDialog(this, "Такий товар вже існує", "Помилка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

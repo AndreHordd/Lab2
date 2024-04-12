@@ -9,12 +9,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 public class DialogManager {
 
     public static void showAddProductDialog(JFrame parentFrame, InventoryManager inventoryManager) {
-        AddDialog addDialog = new AddDialog(parentFrame, "Додати товар", true, inventoryManager.getProductGroups());
+        AddDialog addDialog = new AddDialog(parentFrame, "Додати товар", true, inventoryManager);
         addDialog.setVisible(true);
         // Assuming AddDialog updates the inventory manager with the new product,
         // you might want to refresh the table here as well if the dialog results in a new product being added.
@@ -227,7 +231,7 @@ public class DialogManager {
                 // Subtract the quantity from the current quantity of the product
                 selectedProduct.setQuantity(remainingQuantity);
 
-                if(quantityToWriteOff == 0) {
+                if (quantityToWriteOff == 0) {
                     JOptionPane.showMessageDialog(frame, "Кількість товару не змінилася", "Результат", JOptionPane.INFORMATION_MESSAGE);
                     ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
                     return;
@@ -281,6 +285,57 @@ public class DialogManager {
 
                 // Update the table
                 ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
+            }
+        }
+    }
+
+    public void showImportDialog(MainFrame frame, InventoryManager inventoryManager) {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(frame);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                String line;
+                ProductGroup currentGroup = null;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("@")) {
+                        if (currentGroup != null) {
+                            inventoryManager.importInventory(currentGroup);
+                            currentGroup = null;
+                        }
+                        String[] groupDetails = line.substring(1).split(",");
+                        String groupName = groupDetails[0].trim();
+                        if (inventoryManager.isGroupExists(groupName)) {
+                            throw new IllegalArgumentException("Група " + groupName + " вже існує");
+                        }
+                        currentGroup = new ProductGroup(groupName, groupDetails[1].trim());
+                    } else if (line.startsWith("~")) {
+                        if (currentGroup == null) {
+                            throw new IllegalArgumentException("Товар знайдено до групи");
+                        }
+                        String[] productDetails = line.substring(1).split(",");
+                        String productName = productDetails[0].trim();
+                        if (inventoryManager.isProductExists(productName)) {
+                            throw new IllegalArgumentException("Товар " + productName + " вже існує");
+                        }
+                        new Product(productName, productDetails[1].trim(), productDetails[2].trim(),
+                                Integer.parseInt(productDetails[3].trim()), Double.parseDouble(productDetails[4].trim()), currentGroup);
+                    } else if (line.startsWith("$")) {
+                        if (currentGroup != null) {
+                            inventoryManager.importInventory(currentGroup);
+                            currentGroup = null;
+                        }
+                    } else {
+                        throw new IllegalArgumentException("Недійсний рядок у файлі: " + line);
+                    }
+                }
+                if (currentGroup != null) {
+                    inventoryManager.importInventory(currentGroup);
+                }
+                JOptionPane.showMessageDialog(frame, "Імпорт успішний", "Імпорт", JOptionPane.INFORMATION_MESSAGE);
+                ContentViewPanel.refreshTableData(inventoryManager.getProductGroups()); // Refresh the table
+            } catch (IOException | IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(frame, "Помилка при імпорті файлу: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
