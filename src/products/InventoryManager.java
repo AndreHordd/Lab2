@@ -86,18 +86,6 @@ public class InventoryManager {
         return builder.toString();
     }
 
-    public List<Product> searchProducts(String productName) {
-        List<Product> foundProducts = new ArrayList<>();
-        for (ProductGroup group : productGroups) {
-            for (Product product : group.getProducts()) {
-                if (product.getName().toLowerCase().contains(productName.toLowerCase())) {
-                    foundProducts.add(product);
-                }
-            }
-        }
-        return foundProducts;
-    }
-
     public Collection<Product> getAllProducts() {
         List<Product> allProducts = new ArrayList<>();
         for (ProductGroup group : productGroups) {

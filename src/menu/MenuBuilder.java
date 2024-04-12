@@ -5,6 +5,8 @@ import products.InventoryManager;
 import products.Product;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class MenuBuilder {
     private static DialogManager dialogManager;
@@ -93,7 +95,16 @@ public class MenuBuilder {
 
         JMenuItem searchItem = new JMenuItem("Пошук");
         searchItem.addActionListener(e -> {
-            DialogManager.showSearchDialog(frame, inventoryManager);
+            DialogManager.showSearchDialog(frame);
+        });
+
+        // В файлі MenuBuilder.java
+        JMenuItem resetFilterItem = new JMenuItem("Скинути фільтр");
+        resetFilterItem.addActionListener(e -> {
+            JTable table = ContentViewPanel.getTable();
+            if (table.getRowSorter() != null) {
+                ((TableRowSorter<DefaultTableModel>) table.getRowSorter()).setRowFilter(null);
+            }
         });
 
         infoItem.add(storageStatItem);
@@ -103,6 +114,7 @@ public class MenuBuilder {
         infoItem.add(groupPriceItem);
         infoItem.addSeparator();
         infoItem.add(searchItem);
+        infoItem.add(resetFilterItem); // Додайте цей елемент до відповідного меню
 
         JMenu manageMenu = new JMenu("Управління");
         JMenuItem writeOffItem = new JMenuItem("Списати товар");

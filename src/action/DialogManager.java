@@ -10,6 +10,7 @@ import products.ProductGroup;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
 
@@ -128,43 +129,27 @@ public class DialogManager {
         }
     }
 
-    public static void showSearchDialog(MainFrame frame, InventoryManager inventoryManager) {
+    public static void showSearchDialog(MainFrame frame) {
         // Ask the user for the search query
         String searchQuery = JOptionPane.showInputDialog(frame, "Введіть пошуковий запит:", "Пошук товару", JOptionPane.QUESTION_MESSAGE);
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-            // Filter the products based on the search query
-            List<Product> filteredProducts = inventoryManager.searchProducts(searchQuery.trim());
-            if (filteredProducts.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Товар не знайдено", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            // Create a new JTable and populate it with the filtered products
-            String[] columnNames = {"Група", "Опис групи", "Назва товару", "Опис товару", "Виробник", "Кількість на складі", "Ціна за одиницю"};
-            Object[][] data = new Object[filteredProducts.size()][7];
-            for (int i = 0; i < filteredProducts.size(); i++) {
-                Product product = filteredProducts.get(i);
-                data[i][0] = product.getProductGroup().getName();
-                data[i][1] = product.getProductGroup().getDescription();
-                data[i][2] = product.getName();
-                data[i][3] = product.getDescription();
-                data[i][4] = product.getManufacturer();
-                data[i][5] = product.getQuantity();
-                data[i][6] = product.getPrice();
-            }
-            DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
+            // Get the table and its model
+            JTable table = ContentViewPanel.getTable();
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+            // Create a TableRowSorter and set it to the table
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+            table.setRowSorter(sorter);
+
+            // Create a RowFilter and set it to the table's row sorter
+            RowFilter<DefaultTableModel, Object> filter = new RowFilter<DefaultTableModel, Object>() {
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    // Check if the product name contains the search query
+                    String productName = ((String) entry.getValue(2)).toLowerCase(); // Assuming the product name is in the third column
+                    return productName.contains(searchQuery.trim().toLowerCase());
                 }
             };
-            JTable table = new JTable(model);
-
-            // Create a JScrollPane to make the JTable scrollable
-            JScrollPane scrollPane = new JScrollPane(table);
-            scrollPane.setPreferredSize(new Dimension(700, 500)); // Set the preferred size of the scroll pane
-
-            // Create a JOptionPane with the scroll pane
-            JOptionPane.showMessageDialog(frame, scrollPane, "Результат", JOptionPane.INFORMATION_MESSAGE);
+            sorter.setRowFilter(filter);
         }
     }
 
