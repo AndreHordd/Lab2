@@ -11,7 +11,6 @@ import products.ProductGroup;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DialogManager {
@@ -219,112 +218,85 @@ public class DialogManager {
         }
     }
 
-    public static void showWriteOffDialog(MainFrame frame, InventoryManager inventoryManager) {
-        // Prepare the list of product names for the dropdown
-        List<String> productNames = new ArrayList<>();
-        for (Product product : inventoryManager.getAllProducts()) {
-            productNames.add(product.getProductGroup().getName() + " - " + product.getName());
-        }
+    public static void showWriteOffDialog(MainFrame frame, InventoryManager inventoryManager, Product selectedProduct) {
+        if (selectedProduct != null) {
+            // Ask the user to enter the quantity to remain after write-off
+            SpinnerNumberModel model = new SpinnerNumberModel(selectedProduct.getQuantity(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+            JSpinner spinner = new JSpinner(model);
+            int result = JOptionPane.showConfirmDialog(frame, spinner, "К-сть товару \"" + selectedProduct.getName() + "\" після списання", JOptionPane.OK_CANCEL_OPTION);
 
-        // Ask the user to select a product for write-off
-        String selectedProductName = (String) JOptionPane.showInputDialog(frame, "Виберіть товар для списання:",
-                "Вибір товару", JOptionPane.QUESTION_MESSAGE, null,
-                productNames.toArray(), null);
+            if (result == JOptionPane.OK_OPTION) {
+                int remainingQuantity = (Integer) spinner.getValue();
 
-        if (selectedProductName != null) {
-            // Find the selected product
-            Product selectedProduct = null;
-            for (Product product : inventoryManager.getAllProducts()) {
-                if ((product.getProductGroup().getName() + " - " + product.getName()).equals(selectedProductName)) {
-                    selectedProduct = product;
-                    break;
+                if (remainingQuantity < 0) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару після списання не може бути від'ємною", "Помилка", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            }
 
-            if (selectedProduct != null) {
-                // Ask the user to enter the quantity to remain after write-off
-                SpinnerNumberModel model = new SpinnerNumberModel(selectedProduct.getQuantity(), 0, selectedProduct.getQuantity(), 1);
-                JSpinner spinner = new JSpinner(model);
-                int result = JOptionPane.showConfirmDialog(frame, spinner, "К-сть товару \"" + selectedProductName + "\"", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
+                if (remainingQuantity > selectedProduct.getQuantity()) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару після списання не може бути більшою за поточну кількість товару", "Помилка", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                    if (result > selectedProduct.getQuantity()) {
-                        JOptionPane.showMessageDialog(frame, "Кількість товару для списання не може перевищувати кількість товару на складі", "Помилка списання товару", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+                int quantityToWriteOff = selectedProduct.getQuantity() - remainingQuantity;
 
-                    int remainingQuantity = (Integer) spinner.getValue();
-                    int quantityToWriteOff = selectedProduct.getQuantity() - remainingQuantity;
+                // Subtract the quantity from the current quantity of the product
+                selectedProduct.setQuantity(remainingQuantity);
 
-                    // Subtract the quantity from the current quantity of the product
-                    selectedProduct.setQuantity(remainingQuantity);
-
-                    // If the quantity of the product becomes 0, remove the product from the inventory
-                    if (selectedProduct.getQuantity() == 0) {
-                        selectedProduct.getProductGroup().removeProduct(selectedProduct);
-                        JOptionPane.showMessageDialog(frame, "Всі одиниці товару \"" + selectedProduct.getName() + "\" були продані", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                    } else if (quantityToWriteOff == 0) {
-                        JOptionPane.showMessageDialog(frame, "Кількість товару \"" + selectedProduct.getName() + "\" не змінилася", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Продано " + quantityToWriteOff + " одиниць товару \"" + selectedProduct.getName() + "\"", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                    }
-
-                    // Update the table
+                if(quantityToWriteOff == 0) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару не змінилася", "Результат", JOptionPane.INFORMATION_MESSAGE);
                     ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
+                    return;
                 }
+
+                // If the quantity of the product becomes 0, remove the product from the inventory
+                if (selectedProduct.getQuantity() == 0) {
+                    selectedProduct.getProductGroup().removeProduct(selectedProduct);
+                    JOptionPane.showMessageDialog(frame, "Всі одиниці товару \"" + selectedProduct.getName() + "\" були списані", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Списано " + quantityToWriteOff + " одиниць товару \"" + selectedProduct.getName() + "\"", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                // Update the table
+                ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
             }
         }
     }
 
-    public static void showAdditionDialog(MainFrame frame, InventoryManager inventoryManager) {
-        // Prepare the list of product names for the dropdown
-        List<String> productNames = new ArrayList<>();
-        for (Product product : inventoryManager.getAllProducts()) {
-            productNames.add(product.getProductGroup().getName() + " - " + product.getName());
-        }
+    public static void showAdditionDialog(MainFrame frame, InventoryManager inventoryManager, Product selectedProduct) {
+        if (selectedProduct != null) {
+            // Ask the user to enter the quantity after addition
+            SpinnerNumberModel model = new SpinnerNumberModel(selectedProduct.getQuantity(), Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+            JSpinner spinner = new JSpinner(model);
+            int result = JOptionPane.showConfirmDialog(frame, spinner, "К-сть товару \"" + selectedProduct.getName() + "\" після додавання", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                int newQuantity = (Integer) spinner.getValue();
 
-        // Ask the user to select a product for addition
-        String selectedProductName = (String) JOptionPane.showInputDialog(frame, "Виберіть товар для поповнення:",
-                "Вибір товару", JOptionPane.QUESTION_MESSAGE, null,
-                productNames.toArray(), null);
-
-        if (selectedProductName != null) {
-            // Find the selected product
-            Product selectedProduct = null;
-            for (Product product : inventoryManager.getAllProducts()) {
-                if ((product.getProductGroup().getName() + " - " + product.getName()).equals(selectedProductName)) {
-                    selectedProduct = product;
-                    break;
+                if (newQuantity < 0) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару після додавання не може бути від'ємною", "Помилка", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            }
 
-            if (selectedProduct != null) {
-                // Ask the user to enter the quantity after addition
-                SpinnerNumberModel model = new SpinnerNumberModel(selectedProduct.getQuantity(), selectedProduct.getQuantity(), Integer.MAX_VALUE, 1);
-                JSpinner spinner = new JSpinner(model);
-                int result = JOptionPane.showConfirmDialog(frame, spinner, "К-сть товару \"" + selectedProductName + "\"", JOptionPane.OK_CANCEL_OPTION);
+                int quantityToAdd = newQuantity - selectedProduct.getQuantity();
 
-                if (result == JOptionPane.OK_OPTION) {
-                    int newQuantity = (Integer) spinner.getValue();
-                    int quantityToAdd = newQuantity - selectedProduct.getQuantity();
+                if (quantityToAdd < 0) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару для додавання повинна бути більшою за поточну кількість товару", "Помилка", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                    if (quantityToAdd == 0) {
-                        JOptionPane.showMessageDialog(frame, "Кількість товару \"" + selectedProduct.getName() + "\" не змінилася", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                        return;
-                    }
+                // Add the quantity to the current quantity of the product
+                selectedProduct.setQuantity(newQuantity);
 
-                    if (quantityToAdd < 0) {
-                        JOptionPane.showMessageDialog(frame, "Кількість товару для поповнення повинна бути більшою за поточну кількість товару", "Результат", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    // Add the quantity to the current quantity of the product
-                    selectedProduct.setQuantity(newQuantity);
-
-                    JOptionPane.showMessageDialog(frame, "На склад прийшло " + quantityToAdd + " шт. товару \"" + selectedProduct.getName() + "\"", "Результат", JOptionPane.INFORMATION_MESSAGE);
-                    // Update the table
+                if (quantityToAdd == 0) {
+                    JOptionPane.showMessageDialog(frame, "Кількість товару не змінилася", "Результат", JOptionPane.INFORMATION_MESSAGE);
                     ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
+                    return;
                 }
+
+                JOptionPane.showMessageDialog(frame, "Додано " + quantityToAdd + " одиниць товару \"" + selectedProduct.getName() + "\"", "Результат", JOptionPane.INFORMATION_MESSAGE);
+
+                // Update the table
+                ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
             }
         }
     }

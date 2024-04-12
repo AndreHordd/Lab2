@@ -107,12 +107,22 @@ public class MenuBuilder {
         JMenu manageMenu = new JMenu("Управління");
         JMenuItem writeOffItem = new JMenuItem("Списати товар");
         writeOffItem.addActionListener(e -> {
-            DialogManager.showWriteOffDialog(frame, inventoryManager);
+            Product selectedProduct = inventoryManager.getSelectedProduct(ContentViewPanel.getTable());
+            if (selectedProduct != null) {
+                DialogManager.showWriteOffDialog(frame, inventoryManager, selectedProduct);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Будь ласка, виберіть продукт для списання", "Продукт не вибрано", JOptionPane.WARNING_MESSAGE);
+            }
         });
 
         JMenuItem additionItem = new JMenuItem("Поповнення товару");
         additionItem.addActionListener(e -> {
-            DialogManager.showAdditionDialog(frame, inventoryManager);
+            Product selectedProduct = inventoryManager.getSelectedProduct(ContentViewPanel.getTable());
+            if (selectedProduct != null) {
+                DialogManager.showAdditionDialog(frame, inventoryManager, selectedProduct);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Будь ласка, виберіть продукт для поповнення", "Продукт не вибрано", JOptionPane.WARNING_MESSAGE);
+            }
         });
 
         manageMenu.add(writeOffItem);
