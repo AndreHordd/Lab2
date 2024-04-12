@@ -9,6 +9,7 @@ import products.Product;
 import products.ProductGroup;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +152,13 @@ public class DialogManager {
                 data[i][5] = product.getQuantity();
                 data[i][6] = product.getPrice();
             }
-            JTable table = new JTable(data, columnNames);
+            DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            JTable table = new JTable(model);
 
             // Create a JScrollPane to make the JTable scrollable
             JScrollPane scrollPane = new JScrollPane(table);
