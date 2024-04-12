@@ -1,9 +1,6 @@
 package action;
 
-import menu.AddDialog;
-import menu.ContentViewPanel;
-import menu.EditDialog;
-import menu.MainFrame;
+import menu.*;
 import products.InventoryManager;
 import products.Product;
 import products.ProductGroup;
@@ -149,6 +146,8 @@ public class DialogManager {
                     return productName.contains(searchQuery.trim().toLowerCase());
                 }
             };
+            table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
+            MenuBuilder.resetFilterItem.setEnabled(true); // Enable the reset filter menu item
             sorter.setRowFilter(filter);
         }
     }

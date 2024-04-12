@@ -37,7 +37,7 @@ public class ContentViewPanel {
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(700, 70));
         table.setFillsViewportHeight(true);
-
+        table.getTableHeader().setReorderingAllowed(false);
 
 
         scrollPane = new JScrollPane(table);

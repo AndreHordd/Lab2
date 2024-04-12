@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class MenuBuilder {
+    public static JMenuItem resetFilterItem = new JMenuItem("Скинути фільтр");
     private static DialogManager dialogManager;
 
     public static void createMenuBar(MainFrame frame, InventoryManager inventoryManager) {
@@ -99,12 +100,13 @@ public class MenuBuilder {
         });
 
         // В файлі MenuBuilder.java
-        JMenuItem resetFilterItem = new JMenuItem("Скинути фільтр");
+
         resetFilterItem.addActionListener(e -> {
             JTable table = ContentViewPanel.getTable();
             if (table.getRowSorter() != null) {
                 ((TableRowSorter<DefaultTableModel>) table.getRowSorter()).setRowFilter(null);
             }
+            resetFilterItem.setEnabled(false);
         });
 
         infoItem.add(storageStatItem);
@@ -115,6 +117,7 @@ public class MenuBuilder {
         infoItem.addSeparator();
         infoItem.add(searchItem);
         infoItem.add(resetFilterItem); // Додайте цей елемент до відповідного меню
+        resetFilterItem.setEnabled(false);
 
         JMenu manageMenu = new JMenu("Управління");
         JMenuItem writeOffItem = new JMenuItem("Списати товар");
