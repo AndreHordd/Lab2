@@ -23,7 +23,7 @@ public class DialogManager {
     }
 
     public static void showEditProductDialog(JFrame owner, Product product, List<ProductGroup> productGroups, InventoryManager inventoryManager) {
-        EditDialog editDialog = new EditDialog(owner, "Редагування продукту", true, product, productGroups);
+        EditDialog editDialog = new EditDialog(owner, "Редагування продукту", true, product, productGroups, inventoryManager);
         editDialog.setVisible(true);
         // Оновлення таблиці після закриття діалогу
         ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
@@ -49,6 +49,10 @@ public class DialogManager {
     public static void showNewGroupDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         String groupName = JOptionPane.showInputDialog(parentFrame, "Назва нової групи:");
         if (groupName != null && !groupName.trim().isEmpty()) {
+            if (inventoryManager.isGroupExists(groupName.trim())) {
+                JOptionPane.showMessageDialog(parentFrame, "Група з такою назвою вже існує", "Помилка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String groupDescription = JOptionPane.showInputDialog(parentFrame, "Опис нової групи:");
             if (groupDescription != null && !groupDescription.trim().isEmpty()) {
                 ProductGroup newGroup = new ProductGroup(groupName.trim(), groupDescription.trim());
@@ -104,6 +108,11 @@ public class DialogManager {
                     null,
                     group.getName()
             );
+
+            if (inventoryManager.isGroupExists(newGroupName.trim()) && !newGroupName.trim().equals(group.getName())) {
+                JOptionPane.showMessageDialog(parentFrame, "Група з такою назвою вже існує", "Помилка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             String newGroupDescription = (String) JOptionPane.showInputDialog(
                     parentFrame,

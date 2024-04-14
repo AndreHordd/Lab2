@@ -40,6 +40,19 @@ public class MenuBuilder {
         fileMenu.addSeparator(); // Додаємо роздільник
         fileMenu.add(exitItem);
 
+        JMenu editGroupMenu = new JMenu("Група товарів");
+        JMenuItem addGroupItem = new JMenuItem("Додати групу");
+        addGroupItem.addActionListener(e -> DialogManager.showNewGroupDialog(frame, inventoryManager));
+
+        JMenuItem editGroupItem = new JMenuItem("Редагувати групу");
+        editGroupItem.addActionListener(e -> DialogManager.showEditGroupDialog(frame, inventoryManager));
+
+
+        JMenuItem deleteGroupItem = new JMenuItem("Видалити групу");
+        deleteGroupItem.addActionListener(e -> {
+            DialogManager.showDeleteGroupDialog(frame, inventoryManager);
+        });
+
         // Створення меню "Редагувати"
         JMenu editMenu = new JMenu("Товари");
         JMenuItem addProductItem = new JMenuItem("Додати товар");
@@ -55,21 +68,6 @@ public class MenuBuilder {
                 JOptionPane.showMessageDialog(frame, "Будь ласка, виберіть продукт для редагування.", "Продукт не вибрано", JOptionPane.WARNING_MESSAGE);
             }
         });
-
-        JMenu editGroupMenu = new JMenu("Група товарів");
-        JMenuItem addGroupItem = new JMenuItem("Додати групу");
-        addGroupItem.addActionListener(e -> DialogManager.showNewGroupDialog(frame, inventoryManager));
-
-        JMenuItem editGroupItem = new JMenuItem("Редагувати групу");
-        editGroupItem.addActionListener(e -> DialogManager.showEditGroupDialog(frame, inventoryManager));
-
-
-        JMenuItem deleteGroupItem = new JMenuItem("Видалити групу");
-        deleteGroupItem.addActionListener(e -> {
-            DialogManager.showDeleteGroupDialog(frame, inventoryManager);
-        });
-
-
         JMenuItem deleteProductItem = new JMenuItem("Видалити товар");
         deleteProductItem.addActionListener(e -> {
             DialogManager.showDeleteProductDialog(frame, inventoryManager, ContentViewPanel.getTable());

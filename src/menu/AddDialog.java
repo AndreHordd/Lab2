@@ -89,7 +89,7 @@ public class AddDialog extends JDialog {
             return;
         }
 
-        if(inventoryManager.isProductExists(nameField.getText().trim())){
+        if (inventoryManager.isProductExists(nameField.getText().trim())) {
             JOptionPane.showMessageDialog(this, "Такий товар вже існує", "Помилка", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -99,11 +99,11 @@ public class AddDialog extends JDialog {
             double price = Double.parseDouble(priceField.getText().trim());
 
             if (quantity <= 0 || price <= 0) {
-                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами", "Помилка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами", "Помилка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -120,19 +120,20 @@ public class AddDialog extends JDialog {
 
             // Додавання продукту до вибраної групи
             if (selectedGroup != null) {
-                JOptionPane.showMessageDialog(this, "Продукт успішно збережено.", "Збереження", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Продукт успішно збережено", "Збереження", JOptionPane.INFORMATION_MESSAGE);
                 setVisible(false); // Закриваємо діалог
             } else {
-                JOptionPane.showMessageDialog(this, "Виберіть групу продукту.", "Група не вибрана", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Виберіть групу продукту", "Група не вибрана", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути числами", "Помилка", JOptionPane.ERROR_MESSAGE);
         }
     }
 
 
     private void onNewGroup() {
         String groupName = JOptionPane.showInputDialog(this, "Назва нової групи:");
+
         if (groupName != null && !groupName.trim().isEmpty()) {
             String groupDescription = JOptionPane.showInputDialog(this, "Опис нової групи:");
             if (groupDescription != null && !groupDescription.trim().isEmpty()) {

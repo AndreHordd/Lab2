@@ -1,5 +1,6 @@
 package menu;
 
+import products.InventoryManager;
 import products.Product;
 import products.ProductGroup;
 
@@ -14,11 +15,13 @@ public class EditDialog extends JDialog {
     private JButton saveButton, cancelButton;
     private Product product;
     private List<ProductGroup> productGroups;
+    private InventoryManager inventoryManager;
 
-    public EditDialog(Frame owner, String title, boolean modal, Product product, List<ProductGroup> productGroups) {
+    public EditDialog(Frame owner, String title, boolean modal, Product product, List<ProductGroup> productGroups, InventoryManager inventoryManager) {
         super(owner, title, modal);
         this.product = product;
         this.productGroups = productGroups;
+        this.inventoryManager = inventoryManager;
         initComponents();
         fillData();
     }
@@ -102,17 +105,24 @@ public class EditDialog extends JDialog {
             double price = Double.parseDouble(priceField.getText().trim());
 
             if (quantity <= 0 || price <= 0) {
-                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами.", "Помилка", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Кількість та ціна повинні бути позитивними числами", "Помилка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            product.setName(nameField.getText().trim());
+            String name = nameField.getText().trim();
+
+            if (inventoryManager.isProductExists(name) && !name.equals(product.getName())) {
+                JOptionPane.showMessageDialog(this, "Такий товар вже існує", "Помилка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            product.setName(name);
             product.setDescription(descriptionField.getText().trim());
             product.setManufacturer(manufacturerField.getText().trim());
             product.setQuantity(quantity);
             product.setPrice(price);
 
-            JOptionPane.showMessageDialog(this, "Продукт успішно збережено.", "Збереження", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Продукт успішно збережено", "Збереження", JOptionPane.INFORMATION_MESSAGE);
 
             setVisible(false); // Закриваємо діалог або оновлюємо інтерфейс
 
