@@ -1,7 +1,5 @@
 package products;
 
-import java.io.Serializable;
-
 public class Product {
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +17,6 @@ public class Product {
         this.price = price;
         setProductGroup(group); // Встановлюємо групу на етапі створення продукту
     }
-
 
 
     private ProductGroup productGroup;
@@ -49,21 +46,46 @@ public class Product {
     }
 
 
-
-
-
     // Геттери і сеттери
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public String getManufacturer() { return manufacturer; }
-    public int getQuantity() { return quantity; }
-    public double getPrice() { return price; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setDescription(String description) { this.description = description; }
-    public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-    public void setPrice(double price) { this.price = price; }
+    public String getDescription() {
+        return description;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     @Override
     public String toString() {

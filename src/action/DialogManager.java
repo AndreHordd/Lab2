@@ -9,10 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class DialogManager {
@@ -336,6 +333,27 @@ public class DialogManager {
                 ContentViewPanel.refreshTableData(inventoryManager.getProductGroups()); // Refresh the table
             } catch (IOException | IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(frame, "Помилка при імпорті файлу: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void showExportDialog(MainFrame frame, InventoryManager inventoryManager) {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showSaveDialog(frame);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                for (ProductGroup group : inventoryManager.getProductGroups()) {
+                    writer.write("@" + group.getName() + "," + group.getDescription() + "\n");
+                    for (Product product : group.getProducts()) {
+                        writer.write("~" + product.getName() + "," + product.getDescription() + "," + product.getManufacturer() + ","
+                                + product.getQuantity() + "," + product.getPrice() + "\n");
+                    }
+                    writer.write("$\n"); // End of group
+                }
+                JOptionPane.showMessageDialog(frame, "Експорт успішний", "Експорт", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(frame, "Помилка при експорті до файлу: " + e.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

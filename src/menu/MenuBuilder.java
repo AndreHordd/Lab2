@@ -32,7 +32,7 @@ public class MenuBuilder {
         });
 
         exportItem.addActionListener(e -> {
-            //dialogManager.showExportDialog(frame, inventoryManager);
+            dialogManager.showExportDialog(frame, inventoryManager);
         });
 
         fileMenu.add(importItem);
@@ -45,7 +45,6 @@ public class MenuBuilder {
         JMenuItem addProductItem = new JMenuItem("Додати товар");
         addProductItem.addActionListener(e -> {
             dialogManager.showAddProductDialog(frame, inventoryManager);
-            // Тут має бути логіка для додавання товару
         });
         JMenuItem editProductItem = new JMenuItem("Редагувати товар");
         editProductItem.addActionListener(e -> {
@@ -111,8 +110,6 @@ public class MenuBuilder {
         searchItem.addActionListener(e -> {
             DialogManager.showSearchDialog(frame);
         });
-
-        // В файлі MenuBuilder.java
 
         resetFilterItem.addActionListener(e -> {
             JTable table = ContentViewPanel.getTable();
