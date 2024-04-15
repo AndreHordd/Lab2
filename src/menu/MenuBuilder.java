@@ -106,6 +106,7 @@ public class MenuBuilder {
 
         JMenuItem searchItem = new JMenuItem("Пошук");
         searchItem.addActionListener(e -> {
+            searchItem.setEnabled(false);
             DialogManager.showSearchDialog(frame);
         });
 
@@ -115,6 +116,7 @@ public class MenuBuilder {
                 ((TableRowSorter<DefaultTableModel>) table.getRowSorter()).setRowFilter(null);
             }
             resetFilterItem.setEnabled(false);
+            searchItem.setEnabled(true);
         });
 
         infoItem.add(storageStatItem);
@@ -153,8 +155,8 @@ public class MenuBuilder {
 
         // Додавання меню на панель меню
         menuBar.add(fileMenu);
-        menuBar.add(editMenu);
         menuBar.add(editGroupMenu);
+        menuBar.add(editMenu);
         menuBar.add(infoItem);
         menuBar.add(manageMenu);
 

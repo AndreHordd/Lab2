@@ -99,11 +99,11 @@ public class InventoryManager {
     }
 
     public boolean isGroupExists(String groupName) {
-        return productGroups.stream().anyMatch(group -> group.getName().equals(groupName));
+        return productGroups.stream().anyMatch(group -> group.getName().equalsIgnoreCase(groupName));
     }
 
     public boolean isProductExists(String productName) {
-        return productGroups.stream().anyMatch(group -> group.getProducts().stream().anyMatch(product -> product.getName().equals(productName)));
+        return productGroups.stream().anyMatch(group -> group.getProducts().stream().anyMatch(product -> product.getName().equalsIgnoreCase(productName)));
     }
 }
 

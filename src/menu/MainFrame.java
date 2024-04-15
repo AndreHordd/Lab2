@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 
         MenuBuilder.createMenuBar(this, inventoryManager);
         // ToolBarBuilder.createToolBar(this, inventoryManager);
-        ContentViewPanel.createViewPanel(this, inventoryManager.getProductGroups());
+          ContentViewPanel.createViewPanel(this, inventoryManager.getProductGroups());
 
         setVisible(true);
 
