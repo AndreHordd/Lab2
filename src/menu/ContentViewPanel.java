@@ -9,11 +9,19 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to create the content view panel
+ */
 public class ContentViewPanel {
 
     private static JTable table;
     private static JScrollPane scrollPane;
 
+    /**
+     * Method to create the view panel
+     * @param frame main frame
+     * @param groups list of product groups
+     */
     public static void createViewPanel(MainFrame frame, List<ProductGroup> groups) {
         String[] columnNames = {
                 "Група",
@@ -45,6 +53,11 @@ public class ContentViewPanel {
     }
 
 
+    /**
+     * Method to prepare the table data
+     * @param groups list of product groups
+     * @return table data
+     */
     private static Object[][] prepareTableData(List<ProductGroup> groups) {
         List<Object[]> dataList = new ArrayList<>();
         for (ProductGroup group : groups) {
@@ -64,6 +77,10 @@ public class ContentViewPanel {
         return dataList.toArray(new Object[0][]);
     }
 
+    /**
+     * Method to refresh the table data
+     * @param groups list of product groups
+     */
     public static void refreshTableData(List<ProductGroup> groups) {
         Object[][] data = prepareTableData(groups);
         DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -78,7 +95,10 @@ public class ContentViewPanel {
         });
     }
 
-
+    /**
+     * Method to get the table
+     * @return table
+     */
     public static JTable getTable() {
         return table;
     }
