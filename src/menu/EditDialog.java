@@ -8,15 +8,48 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Class to create an add dialog
+ */
 public class EditDialog extends JDialog {
+    /**
+     * Text fields for product name, manufacturer, quantity, and price
+     */
     private JTextField nameField, manufacturerField, quantityField, priceField;
+    /**
+     * Text area for product description
+     */
     private JTextArea descriptionField;
+    /**
+     * Combo box for product group selection
+     */
     private JComboBox<ProductGroup> groupComboBox;
+    /**
+     * Buttons for saving and canceling
+     */
     private JButton saveButton, cancelButton;
+    /**
+     * Product to edit
+     */
     private Product product;
+    /**
+     * List of product groups
+     */
     private List<ProductGroup> productGroups;
+    /**
+     * Inventory manager to manage the inventory
+     */
     private InventoryManager inventoryManager;
 
+    /**
+     * Constructor to create an edit dialog
+     * @param owner owner frame
+     * @param title title of the dialog
+     * @param modal modal flag
+     * @param product product to edit
+     * @param productGroups list of product groups
+     * @param inventoryManager inventory manager
+     */
     public EditDialog(Frame owner, String title, boolean modal, Product product, List<ProductGroup> productGroups, InventoryManager inventoryManager) {
         super(owner, title, modal);
         this.product = product;
@@ -26,6 +59,9 @@ public class EditDialog extends JDialog {
         fillData();
     }
 
+    /**
+     * Method to initialize the components of the dialog
+     */
     private void initComponents() {
         nameField = new JTextField(20);
         descriptionField = new JTextArea(5, 20);
@@ -48,6 +84,9 @@ public class EditDialog extends JDialog {
         cancelButton.addActionListener(e -> setVisible(false));
     }
 
+    /**
+     * Method to fill the data of the product to edit
+     */
     private void fillData() {
         nameField.setText(product.getName());
         descriptionField.setText(product.getDescription());
@@ -57,6 +96,10 @@ public class EditDialog extends JDialog {
         groupComboBox.setSelectedItem(productGroups.stream().filter(pg -> pg.getProducts().contains(product)).findFirst().orElse(null));
     }
 
+    /**
+     * Method to set up the panel with components
+     * @return panel with components
+     */
     private JPanel setupPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -81,6 +124,10 @@ public class EditDialog extends JDialog {
         return panel;
     }
 
+    /**
+     * Method to set up the buttons panel
+     * @return panel with buttons
+     */
     private JPanel setupButtonsPanel() {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(saveButton);
@@ -88,7 +135,11 @@ public class EditDialog extends JDialog {
         return buttonsPanel;
     }
 
-    private void onSave(List<ProductGroup> groups) { // Припускаємо, що groups передається як параметр
+    /**
+     * Method to save the product
+     * @param groups list of product groups
+     */
+    private void onSave(List<ProductGroup> groups) {
         // Перевірка, чи поля не порожні
         ProductGroup selectedGroup = (ProductGroup) groupComboBox.getSelectedItem();
         product.setProductGroup(selectedGroup);

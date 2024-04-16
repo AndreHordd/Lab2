@@ -8,19 +8,34 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+/**
+ * Class to create a menu bar
+ */
 public class MenuBuilder {
+    /**
+     * Menu item to reset the filter
+     */
     public static JMenuItem resetFilterItem = new JMenuItem("Скинути фільтр");
+    /**
+     * Dialog manager to manage dialogs
+     */
     private static DialogManager dialogManager;
 
+    /**
+     * Constructor to create a menu builder
+     */
     public MenuBuilder() {
         dialogManager = new DialogManager();
-        // Other initialization code...
     }
 
+    /**
+     * Method to create a menu bar
+     * @param frame main frame
+     * @param inventoryManager inventory manager
+     */
     public static void createMenuBar(MainFrame frame, InventoryManager inventoryManager) {
         JMenuBar menuBar = new JMenuBar();
 
-        // Створення меню "Файл"
         JMenu fileMenu = new JMenu("Файл");
         JMenuItem importItem = new JMenuItem("Імпорт");
         JMenuItem exportItem = new JMenuItem("Експорт");
@@ -53,7 +68,6 @@ public class MenuBuilder {
             DialogManager.showDeleteGroupDialog(frame, inventoryManager);
         });
 
-        // Створення меню "Редагувати"
         JMenu editMenu = new JMenu("Товари");
         JMenuItem addProductItem = new JMenuItem("Додати товар");
         addProductItem.addActionListener(e -> {
@@ -153,7 +167,6 @@ public class MenuBuilder {
         manageMenu.add(writeOffItem);
         manageMenu.add(additionItem);
 
-        // Додавання меню на панель меню
         menuBar.add(fileMenu);
         menuBar.add(editGroupMenu);
         menuBar.add(editMenu);

@@ -12,16 +12,29 @@ import java.awt.*;
 import java.io.*;
 import java.util.List;
 
+/**
+ * Class to manage dialogs
+ */
 public class DialogManager {
 
+    /**
+     * Method to show the add product dialog
+     * @param parentFrame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showAddProductDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         AddDialog addDialog = new AddDialog(parentFrame, "Додати товар", true, inventoryManager);
         addDialog.setVisible(true);
-        // Assuming AddDialog updates the inventory manager with the new product,
-        // you might want to refresh the table here as well if the dialog results in a new product being added.
         ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
     }
 
+    /**
+     * Method to show the edit product dialog
+     * @param owner owner frame
+     * @param product product to edit
+     * @param productGroups list of product groups
+     * @param inventoryManager inventory manager
+     */
     public static void showEditProductDialog(JFrame owner, Product product, List<ProductGroup> productGroups, InventoryManager inventoryManager) {
         EditDialog editDialog = new EditDialog(owner, "Редагування продукту", true, product, productGroups, inventoryManager);
         editDialog.setVisible(true);
@@ -29,6 +42,12 @@ public class DialogManager {
         ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
     }
 
+    /**
+     * Method to show the delete product dialog
+     * @param parentFrame parent frame
+     * @param inventoryManager inventory manager
+     * @param table table to get the selected product
+     */
     public static void showDeleteProductDialog(JFrame parentFrame, InventoryManager inventoryManager, JTable table) {
         Product selectedProduct = inventoryManager.getSelectedProduct(table);
         if (selectedProduct != null) {
@@ -46,6 +65,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the add group dialog
+     * @param parentFrame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showNewGroupDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         String groupName = JOptionPane.showInputDialog(parentFrame, "Назва нової групи:");
         if (groupName != null && !groupName.trim().isEmpty()) {
@@ -63,6 +87,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the delete group dialog
+     * @param parentFrame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showDeleteGroupDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         List<ProductGroup> groups = inventoryManager.getProductGroups();
         if (groups.isEmpty()) {
@@ -89,6 +118,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the edit group dialog
+     * @param parentFrame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showEditGroupDialog(JFrame parentFrame, InventoryManager inventoryManager) {
         // Вибір групи для редагування
         Object selectedGroup = JOptionPane.showInputDialog(parentFrame, "Виберіть групу для редагування:",
@@ -130,12 +164,14 @@ public class DialogManager {
                 group.setDescription(newGroupDescription.trim());
 
                 ContentViewPanel.refreshTableData(inventoryManager.getProductGroups());
-                // Тут можна додати оновлення віджетів або інтерфейсів, які залежать від списку груп
-                // Наприклад, оновлення відображення таблиці або випадаючих списків
             }
         }
     }
 
+    /**
+     * Method to show the search dialog
+     * @param frame parent frame
+     */
     public static void showSearchDialog(MainFrame frame) {
         // Ask the user for the search query
         String searchQuery = JOptionPane.showInputDialog(frame, "Введіть пошуковий запит:", "Пошук товару", JOptionPane.QUESTION_MESSAGE);
@@ -162,6 +198,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the storage statistics dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showStorageStatDialog(MainFrame frame, InventoryManager inventoryManager) {
         // Get the statistics from the inventory
         String statistics = inventoryManager.getStatistics();
@@ -178,6 +219,11 @@ public class DialogManager {
         JOptionPane.showMessageDialog(frame, scrollPane, "Статистика складу", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Method to show the group statistics dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showGroupStatDialog(MainFrame frame, InventoryManager inventoryManager) {
         Object selectedGroup = JOptionPane.showInputDialog(frame, "Виберіть групу для відображення статистики:",
                 "Вибір групи", JOptionPane.QUESTION_MESSAGE, null,
@@ -197,10 +243,20 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the storage price dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showStoragePriceDialog(MainFrame frame, InventoryManager inventoryManager) {
         JOptionPane.showMessageDialog(frame, "Загальна вартість складу: " + inventoryManager.calculateInventoryPrice(), "Результат", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Method to show the group price dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public static void showGroupPriceDialog(MainFrame frame, InventoryManager inventoryManager) {
         Object selectedGroup = JOptionPane.showInputDialog(frame, "Виберіть групу для розрахунку вартості:",
                 "Вибір групи", JOptionPane.QUESTION_MESSAGE, null,
@@ -212,6 +268,12 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the write-off dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     * @param selectedProduct selected product
+     */
     public static void showWriteOffDialog(MainFrame frame, InventoryManager inventoryManager, Product selectedProduct) {
         if (selectedProduct != null) {
             // Ask the user to enter the quantity to remain after write-off
@@ -257,6 +319,12 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the addition dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     * @param selectedProduct selected product
+     */
     public static void showAdditionDialog(MainFrame frame, InventoryManager inventoryManager, Product selectedProduct) {
         if (selectedProduct != null) {
             // Ask the user to enter the quantity after addition
@@ -295,6 +363,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the import dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public void showImportDialog(MainFrame frame, InventoryManager inventoryManager) {
         JFileChooser fileChooser = new JFileChooser();
         int returnValue = fileChooser.showOpenDialog(frame);
@@ -346,6 +419,11 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Method to show the export dialog
+     * @param frame parent frame
+     * @param inventoryManager inventory manager
+     */
     public void showExportDialog(MainFrame frame, InventoryManager inventoryManager) {
         JFileChooser fileChooser = new JFileChooser();
         int returnValue = fileChooser.showSaveDialog(frame);
@@ -366,6 +444,4 @@ public class DialogManager {
             }
         }
     }
-
-    // Other methods for showing different dialogs...
 }

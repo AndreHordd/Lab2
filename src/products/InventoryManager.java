@@ -5,13 +5,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Class to manage the inventory
+ */
 public class InventoryManager {
+    /**
+     * List of product groups
+     */
     private List<ProductGroup> productGroups = new ArrayList<>();
 
+
     public InventoryManager() {
-        initializeProductGroups();
+        // initializeProductGroups();
     }
 
+    /**
+     * Method to initialize the product groups
+     */
     private void initializeProductGroups() {
 
         // Створення та додавання першої групи
@@ -32,14 +42,30 @@ public class InventoryManager {
         productGroups.add(beverages);
     }
 
+    /**
+     * Method to add a product group
+     *
+     * @param group product group to add
+     */
     public void importInventory(ProductGroup group) {
         productGroups.add(group);
     }
 
+    /**
+     * Method to get the product groups
+     *
+     * @return list of product groups
+     */
     public List<ProductGroup> getProductGroups() {
         return productGroups;
     }
 
+    /**
+     * Method to get selected product from the table
+     *
+     * @param table table to get the selected product from
+     * @return selected product
+     */
     public Product getSelectedProduct(JTable table) {
         int selectedRowIndex = table.getSelectedRow();
         if (selectedRowIndex != -1) {
@@ -57,7 +83,11 @@ public class InventoryManager {
         return null; // No product selected or found
     }
 
-
+    /**
+     * Method to calculate the total price of the inventory
+     *
+     * @return total price of the inventory
+     */
     public String calculateInventoryPrice() {
         StringBuilder builder = new StringBuilder();
         double total = 0.0;
@@ -70,8 +100,10 @@ public class InventoryManager {
         return builder.toString();
     }
 
-    /*
-    має бути зазначена к-сть товарів на складі та списком всі товари на складі
+    /**
+     * Method to get the statistics of the inventory
+     *
+     * @return statistics of the inventory
      */
     public String getStatistics() {
         StringBuilder builder = new StringBuilder();
@@ -90,6 +122,11 @@ public class InventoryManager {
         return builder.toString();
     }
 
+    /**
+     * Method to get all products
+     *
+     * @return all products
+     */
     public Collection<Product> getAllProducts() {
         List<Product> allProducts = new ArrayList<>();
         for (ProductGroup group : productGroups) {
@@ -98,13 +135,24 @@ public class InventoryManager {
         return allProducts;
     }
 
+    /**
+     * Method to check if a group exists
+     *
+     * @param groupName name of the group
+     * @return true if the group exists, false otherwise
+     */
     public boolean isGroupExists(String groupName) {
         return productGroups.stream().anyMatch(group -> group.getName().equalsIgnoreCase(groupName));
     }
 
+
+    /**
+     * Method to check if a product exists
+     *
+     * @param productName name of the product
+     * @return true if the product exists, false otherwise
+     */
     public boolean isProductExists(String productName) {
         return productGroups.stream().anyMatch(group -> group.getProducts().stream().anyMatch(product -> product.getName().equalsIgnoreCase(productName)));
     }
 }
-
-// Класи products.Product та products.ProductGroup вже визначені, як було припущено раніше.

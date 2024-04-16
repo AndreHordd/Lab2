@@ -8,15 +8,47 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Class to create an add dialog
+ */
 public class AddDialog extends JDialog {
+    /**
+     * Text fields for product name, manufacturer, quantity, and price
+     */
     private JTextField nameField, manufacturerField, quantityField, priceField;
+
+    /**
+     * Text area for product description
+     */
     private JTextArea descriptionField;
+
+    /**
+     * Combo box for product group selection
+     */
     private JComboBox<ProductGroup> groupComboBox;
+
+    /**
+     * Buttons for saving, canceling, and creating a new group
+     */
     private JButton saveButton, cancelButton, newGroupButton;
+
+    /**
+     * Inventory manager to manage the inventory
+     */
     private InventoryManager inventoryManager;
 
+    /**
+     * List of product groups
+     */
     private List<ProductGroup> productGroups;
 
+    /**
+     * Constructor to create an add dialog
+     * @param owner owner frame
+     * @param title title of the dialog
+     * @param modal modal flag
+     * @param inventoryManager inventory manager
+     */
     public AddDialog(Frame owner, String title, boolean modal, InventoryManager inventoryManager) {
         super(owner, title, modal);
         this.productGroups = inventoryManager.getProductGroups();
@@ -24,6 +56,9 @@ public class AddDialog extends JDialog {
         initComponents();
     }
 
+    /**
+     * Method to initialize the components of the dialog
+     */
     private void initComponents() {
         nameField = new JTextField(20);
         descriptionField = new JTextArea(5, 20);
@@ -48,6 +83,10 @@ public class AddDialog extends JDialog {
         newGroupButton.addActionListener(e -> onNewGroup());
     }
 
+    /**
+     * Method to set up the panel with components
+     * @return panel with components
+     */
     private JPanel setupPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -72,6 +111,10 @@ public class AddDialog extends JDialog {
         return panel;
     }
 
+    /**
+     * Method to set up the buttons panel
+     * @return panel with buttons
+     */
     private JPanel setupButtonsPanel() {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(saveButton);
@@ -80,8 +123,10 @@ public class AddDialog extends JDialog {
         return buttonsPanel;
     }
 
+    /**
+     * Method to show the dialog
+     */
     private void onSave() {
-        // Перевірка, чи поля не порожні
         if (nameField.getText().trim().isEmpty() || descriptionField.getText().trim().isEmpty() ||
                 manufacturerField.getText().trim().isEmpty() || quantityField.getText().trim().isEmpty() ||
                 priceField.getText().trim().isEmpty()) {
@@ -130,7 +175,9 @@ public class AddDialog extends JDialog {
         }
     }
 
-
+    /**
+     * Method to create a new group
+     */
     private void onNewGroup() {
         String groupName = JOptionPane.showInputDialog(this, "Назва нової групи:");
 
